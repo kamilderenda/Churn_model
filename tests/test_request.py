@@ -20,7 +20,6 @@ data_prepared = prepare_request(data_0)
 response = requests.post(url, json=data_prepared)
 print(response.json())
 
-
 data_1 = {
   "CreditScore": 699,
   "Geography": "Germany",
