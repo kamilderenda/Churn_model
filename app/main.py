@@ -19,6 +19,11 @@ class ChurnRequest(BaseModel):
     HasCrCard: int
     IsActiveMember: int
     EstimatedSalary: float
+    BalanceGroup: object
+    EstimatedSalaryGroup: object
+    TenureGroup: object
+    AgeGroup: object
+    CreditScoreClass: object
 
 @app.get("/")
 def read_root():

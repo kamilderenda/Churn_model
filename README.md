@@ -239,3 +239,32 @@ docker run -p 8000:8000 churn-api
 
 Open:
 http://localhost:8000/docs
+
+Tests:
+data_0 = {
+    "CreditScore": 525,
+    "Geography": "Germany",
+    "Gender": "Male",
+    "Age": 33,
+    "Tenure": 4,
+    "Balance": 131023.76,
+    "NumOfProducts": 2,
+    "HasCrCard": 0,
+    "IsActiveMember": 0,
+    "EstimatedSalary": 55072.93
+}
+
+data_1 = {
+  "CreditScore": 699,
+  "Geography": "Germany",
+  "Gender": "Female",
+  "Age": 54,
+  "Tenure": 3,
+  "Balance": 111009.32,
+  "NumOfProducts": 1,
+  "HasCrCard": 1,
+  "IsActiveMember": 1,
+  "EstimatedSalary": 155905.79
+}
+
+![img.png](img.png)
