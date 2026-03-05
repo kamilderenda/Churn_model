@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import pandas as pd
-from app.fe import feature_engineering
 
 app = FastAPI(title='Churn Prediction API')
 

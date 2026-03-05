@@ -1,5 +1,5 @@
 import requests
-from app.fe import prepare_request
+from src.app.fe import prepare_request
 
 url = "http://127.0.0.1:8000/predict"
 
