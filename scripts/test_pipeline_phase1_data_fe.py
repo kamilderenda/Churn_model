@@ -1,10 +1,3 @@
-import os
-import pandas as pd
-
-# import sys
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
-
-
 from src.data.load_data import load_data
 from src.data.preprocess import preprocess_data
 from src.features.build_features import feature_engineering

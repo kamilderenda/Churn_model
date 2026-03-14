@@ -5,3 +5,6 @@ __pycache__/
 *.pyc
 *.pkl
 model/
+data/
+scripts/*.db
+scripts/mlflow/
