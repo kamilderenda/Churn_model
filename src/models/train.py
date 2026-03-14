@@ -5,6 +5,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import PowerTransformer, OneHotEncoder
 import lightgbm as lgb
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score, classification_report
 
 cat_cols=['Geography',
  'Gender',
@@ -43,10 +44,16 @@ def train_model(df: pd.DataFrame, target_col: str) -> Pipeline:
     pipeline.fit(X_train, y_train)
 
     with mlflow.start_run():
+        f1= f1_score(y_test, pipeline.predict(X_test))
+        precision=precision_score(y_test, pipeline.predict(X_test))
+        recall=recall_score(y_test, pipeline.predict(X_test))
+
         mlflow.log_params(params)
         mlflow.sklearn.log_model(pipeline, "model")
-        mlflow.log_metric("train_score", pipeline.score(X_train, y_train))
-        mlflow.log_metric("test_score", pipeline.score(X_test, y_test))
+        mlflow.log_metric("f1_score", f1)
+        mlflow.log_metric("precision", precision)
+        mlflow.log_metric("recall", recall)
         train_ds=mlflow.data.from_pandas(X_train, source="train_data")
         mlflow.log_data(train_ds, "train_data")
+
     return pipeline
