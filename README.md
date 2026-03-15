@@ -31,9 +31,10 @@ The project consists of two main stages:
 - Feature Importance Analysis
 - Threshold & Probability Analysis
 
-### 2️⃣ Productionization (FastAPI + Docker)
+### 2️⃣ Productionization (FastAPI + Docker + MLflow)
 
 - Model serialization (.pkl)
+- MLflow integration for experiment tracking, model retraining, and in-memory deployment
 - FastAPI for inference
 - Input validation
 - Docker containerization
@@ -176,29 +177,18 @@ Key findings:
 
 ---
 
-# 🚀 Production Deployment
+# 🐳 Docker, MLflow & CI/CD
 
-The final model was deployed as a REST API using:
+The entire API service is fully containerized and experiment-managed:
 
-- **FastAPI**
-- **Docker**
+- `Dockerfile` builds reproducible image with all dependencies
+- **MLflow** tracks experiments, logs metrics/parameters, retrains models, and enables in-memory deployment
+- **CI/CD pipeline** automatically triggers on repository push:
+  - Rebuilds Docker image
+  - Pushes image to **DockerHub**
+- Deployment automated on **Render.com**, enabling live production inference
 
-### Production Flow
 
-Client → API → Feature Engineering → Model → JSON Response
-
-### API Output
-
-- Predicted class (0/1)
-- Churn probability
-
-### Example Response
-
-#### json
-{
-  "churn_prediction": 0,
-  "churn_probability": 0.23
-}
 
 🧰 Tech Stack
 
