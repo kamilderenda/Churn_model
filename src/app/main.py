@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import gradio as gr
-import pandas as pd
 from src.serving.inference import predict
 
 
