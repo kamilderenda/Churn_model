@@ -24,4 +24,4 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags: your-dockerhub-username/your-image-name:latest
+          tags: kamilderenda/churn-api:latest
