@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 from src.features.build_features import feature_engineering
 
-models_dir = Path("scripts/mlruns/0/models")
+models_dir = Path("src/serving/models")
 latest = max(models_dir.iterdir(), key=os.path.getmtime)
 model_path = latest / "artifacts"
 

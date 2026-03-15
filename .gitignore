@@ -8,3 +8,8 @@ model/
 data/
 scripts/*.db
 scripts/mlflow/
+mlruns/
+artifacts/
+
+!src/serving/models/
+!src/serving/models/**
