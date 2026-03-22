@@ -1,6 +1,7 @@
 # created by virtualenv automatically
 .venv/
 .idea/
+.venv_ge/
 __pycache__/
 *.pyc
 *.pkl

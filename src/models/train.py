@@ -43,16 +43,18 @@ def train_model(df: pd.DataFrame) -> Pipeline:
     ])
     pipeline.fit(X_train, y_train)
 
+    mlflow.set_experiment("churn_model_retraining_1")
+    mlflow.set_tracking_uri("http://localhost:5000")
     with mlflow.start_run():
         f1= f1_score(y_test, pipeline.predict(X_test))
         precision=precision_score(y_test, pipeline.predict(X_test))
         recall=recall_score(y_test, pipeline.predict(X_test))
-
         mlflow.log_params(params)
-        mlflow.sklearn.log_model(pipeline, "model")
+        mlflow.sklearn.log_model(pipeline, "model", registered_model_name="churn_model")
         mlflow.log_metric("f1_score", f1)
         mlflow.log_metric("precision", precision)
         mlflow.log_metric("recall", recall)
         train_ds=mlflow.data.from_pandas(X_train, source="train_data")
         mlflow.log_input(train_ds, context="training")
+
     return pipeline
