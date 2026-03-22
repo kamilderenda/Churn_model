@@ -5,6 +5,7 @@
 __pycache__/
 *.pyc
 *.pkl
+*.csv
 model/
 data/
 scripts/*.db
