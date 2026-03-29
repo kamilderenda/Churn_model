@@ -5,7 +5,10 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import PowerTransformer, OneHotEncoder
 import lightgbm as lgb
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import recall_score, precision_score, f1_score
+from sklearn.metrics import classification_report
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
 cat_cols=['Geography',
  'Gender',
@@ -42,19 +45,39 @@ def train_model(df: pd.DataFrame) -> Pipeline:
         ('model', model)
     ])
     pipeline.fit(X_train, y_train)
-
+    
+    report_dict=classification_report(y_test, pipeline.predict(X_test), output_dict=True)
     mlflow.set_experiment("churn_model_retraining_1")
     mlflow.set_tracking_uri("http://localhost:5000")
-    with mlflow.start_run():
-        f1= f1_score(y_test, pipeline.predict(X_test))
-        precision=precision_score(y_test, pipeline.predict(X_test))
-        recall=recall_score(y_test, pipeline.predict(X_test))
-        mlflow.log_params(params)
-        mlflow.sklearn.log_model(pipeline, "model", registered_model_name="churn_model")
-        mlflow.log_metric("f1_score", f1)
-        mlflow.log_metric("precision", precision)
-        mlflow.log_metric("recall", recall)
-        train_ds=mlflow.data.from_pandas(X_train, source="train_data")
-        mlflow.log_input(train_ds, context="training")
+    # mlflow.lightgbm.autolog()
+    with mlflow.start_run(run_name="retrain_run_1"):
+        
+        for label, metrics in report_dict.items():
+            clean_label = str(label).replace(" ", "_") 
+            if isinstance(metrics, dict):
+                for metric_name, value in metrics.items():
+                    clean_metric = metric_name.replace(" ", "_")
+                    mlflow.log_metric(f"{clean_label}_{clean_metric}", value)
+            else:
+                mlflow.log_metric(clean_label, metrics)
 
+        mlflow.log_params(params)
+
+        feature_importances = pipeline.named_steps['model'].feature_importances_
+        feature_names = pipeline.named_steps['preprocessor'].get_feature_names_out()
+
+        sorted_indices = np.argsort(feature_importances)[::-1]
+        sorted_importances = feature_importances[sorted_indices]
+        sorted_names = feature_names[sorted_indices]
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.barplot(x=sorted_importances, y=sorted_names, ax=ax)
+        ax.set_title("Feature Importances")
+        plt.tight_layout()
+        fig.canvas.draw()
+
+        mlflow.log_figure(fig, "feature_importances.png")
+        plt.close(fig)
+
+        mlflow.sklearn.log_model(pipeline, "model", registered_model_name="churn_model")
     return pipeline
